@@ -5,11 +5,14 @@ It allows to use declarative language (yaml) to talk to APIs and to save the res
 The main use case is to talk to [HashiCorp Vault API](https://www.vaultproject.io/api/overview.html).
 
 It is heavily based on [Tavern-ci](https://github.com/taverntesting/tavern)
+# Installing it
+```
+pip install yapi-ci
+```
 # How to use it
 For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this service will echo everything we send plus extra information about our request.
 
 ```c
-$ pip install yapi-ci
 $ export VAULT_ADDR=http://httpbin.org/put
 $ export VAULT_CLUSTER=primary
 $ yapi examples/vault-init.yaml
