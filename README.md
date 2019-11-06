@@ -1,7 +1,10 @@
 # Description of yapi
 
 It allows to use declarative language (yaml) to talk to APIs and to save the response for future ones.
-The main use case is to talk to [HashiCorp Vault API](https://www.vaultproject.io/api/overview.html)
+
+The main use case is to talk to [HashiCorp Vault API](https://www.vaultproject.io/api/overview.html).
+
+It is heavily based on [Tavern-ci](https://github.com/taverntesting/tavern)
 # How to use it
 For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this service will echo everything we send plus extra information about our request.
 
@@ -120,3 +123,4 @@ keys: "{ext.json_keys_0}"
 
 ## TODO 
 - [ ] Inject response as a variable to the next stage without having to read it
+- [ ] Create `PyPi` package for easy installation
