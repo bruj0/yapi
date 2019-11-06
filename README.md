@@ -8,10 +8,11 @@ For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this serv
 ```c
 $ export VAULT_ADDR=http://httpbin.org/put
 $ export VAULT_CLUSTER=primary
-$ python -m yapi vault-init.yaml
-2019-11-06 13:03:01,359 [INFO]: Starting yapi 0.1
-2019-11-06 13:03:01,366 [INFO]: Loading examples/vault-init.yaml
-2019-11-06 13:03:01,367 [INFO]: Body of request:
+$ python -m yapi examples/vault-init.yaml
+2019-11-06 13:19:49,733 [INFO]: Starting yapi 0.1
+2019-11-06 13:19:49,738 [INFO]: Loading examples/vault-init.yaml
+2019-11-06 13:19:49,738 [INFO]: Start of stage: 01-Init Vault
+2019-11-06 13:19:49,739 [INFO]: Body of request:
 {
     "keys": [
         "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
@@ -19,16 +20,19 @@ $ python -m yapi vault-init.yaml
     "secret_shares": "1",
     "secret_threshold": "1"
 }
-2019-11-06 13:03:01,560 [INFO]: Received status code OK 200 == 200
-2019-11-06 13:03:01,560 [INFO]: Writting to examples/data/primary/init.json
-2019-11-06 13:03:01,563 [INFO]: Reading examples/data/primary/init.json , sub_vars: True
-2019-11-06 13:03:01,564 [INFO]: Body of request:
+2019-11-06 13:19:49,936 [INFO]: Received status code OK 200 == 200
+2019-11-06 13:19:49,936 [INFO]: Writing to examples/data/primary/init.json
+2019-11-06 13:19:49,937 [INFO]: End of stage: 01-Init Vault
+2019-11-06 13:19:49,937 [INFO]: Start of stage: 02-Unseal Vault
+2019-11-06 13:19:49,937 [INFO]: Reading examples/data/primary/init.json , sub_vars: True
+2019-11-06 13:19:49,938 [INFO]: Body of request:
 {
     "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
 }
-2019-11-06 13:03:01,760 [INFO]: Received status code OK 200 == 200
-2019-11-06 13:03:01,761 [INFO]: Writting to examples/data/primary/unsealed_response.json
-2019-11-06 13:03:01,762 [INFO]: Finished examples/vault-init.yaml
+2019-11-06 13:19:50,132 [INFO]: Received status code OK 200 == 200
+2019-11-06 13:19:50,132 [INFO]: Writing to examples/data/primary/unsealed_response.json
+2019-11-06 13:19:50,133 [INFO]: End of stage: 02-Unseal Vault
+2019-11-06 13:19:50,133 [INFO]: Finished examples/vault-init.yaml
 ```
 
 # Example file vault-init.yaml

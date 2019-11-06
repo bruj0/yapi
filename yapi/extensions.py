@@ -31,7 +31,7 @@ class Extensions:
     def save_response(self,*args,**kwargs):
         #logger.debug(f"Called save_response with {args} and {kwargs}")
         try:
-            msg = f"Writting to {kwargs['path']}"
+            msg = f"Writing to {kwargs['path']}"
             if 'key' in kwargs:
                 msg=f"{msg}, using key: {kwargs['key']}"
             logger.info(msg)
