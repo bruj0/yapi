@@ -1,0 +1,3 @@
+#!/usr/bin/env python
+import yapi.main as Yapi
+Yapi.main()

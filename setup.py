@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="yapi-ci", # Replace with your own username
-    version="0.1",
+    version="0.1.2",
     author="Rodrigo Diaz Leven",
     author_email="ramakandra@gmail.com",
     license = "MIT",
@@ -32,6 +32,6 @@ setuptools.setup(
         'requests-toolbelt>=0.9.1',
         'six>=1.13.0',
         'urllib3>=1.25.6',
-    ]
-
+    ],
+    scripts=['bin/yapi']
 )

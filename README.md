@@ -9,9 +9,10 @@ It is heavily based on [Tavern-ci](https://github.com/taverntesting/tavern)
 For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this service will echo everything we send plus extra information about our request.
 
 ```c
+$ pip install yapi-ci
 $ export VAULT_ADDR=http://httpbin.org/put
 $ export VAULT_CLUSTER=primary
-$ python -m yapi examples/vault-init.yaml
+$ yapi examples/vault-init.yaml
 2019-11-06 13:19:49,733 [INFO]: Starting yapi 0.1
 2019-11-06 13:19:49,738 [INFO]: Loading examples/vault-init.yaml
 2019-11-06 13:19:49,738 [INFO]: Start of stage: 01-Init Vault
