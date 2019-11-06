@@ -1,0 +1,36 @@
+---
+stages:
+  - name: 01-Init Vault
+    request:
+      url: "{env_vars.VAULT_ADDR}"
+      method: PUT
+      json:
+        secret_shares: 1
+        secret_threshold: 1
+        keys:
+           - 7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2
+    response:
+      status_code: 200
+      save:
+        $ext:
+          function: extensions.save_response
+          extra_kwargs:
+            path: "examples/data/{env_vars.VAULT_CLUSTER}/init.json"
+  - name: 02-Unseal Vault
+    request:
+      url: "{env_vars.VAULT_ADDR}"
+      method: PUT
+      json:
+        keys: "{ext.json_keys_0}"
+        $ext:
+          function: extensions.read_json
+          extra_kwargs:
+            path: "examples/data/{env_vars.VAULT_CLUSTER}/init.json"
+            sub_vars: True
+    response:
+      status_code: 200
+      save:
+        $ext:
+          function: extensions.save_response
+          extra_kwargs:
+            path: "examples/data/{env_vars.VAULT_CLUSTER}/unsealed_response.json"
