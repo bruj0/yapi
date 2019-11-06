@@ -1,13 +1,34 @@
 # Description of yapi
 
 It allows to use declarative language (yaml) to talk to APIs and to save the response for future ones.
-# Using it
+The main use case is to talk to [HashiCorp Vault API](https://www.vaultproject.io/api/overview.html)
+# How to use it
 For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this service will echo everything we send plus extra information about our request.
 
-```
+```c
 $ export VAULT_ADDR=http://httpbin.org/put
 $ export VAULT_CLUSTER=primary
 $ python -m yapi vault-init.yaml
+2019-11-06 13:03:01,359 [INFO]: Starting yapi 0.1
+2019-11-06 13:03:01,366 [INFO]: Loading examples/vault-init.yaml
+2019-11-06 13:03:01,367 [INFO]: Body of request:
+{
+    "keys": [
+        "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    ],
+    "secret_shares": "1",
+    "secret_threshold": "1"
+}
+2019-11-06 13:03:01,560 [INFO]: Received status code OK 200 == 200
+2019-11-06 13:03:01,560 [INFO]: Writting to examples/data/primary/init.json
+2019-11-06 13:03:01,563 [INFO]: Reading examples/data/primary/init.json , sub_vars: True
+2019-11-06 13:03:01,564 [INFO]: Body of request:
+{
+    "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+}
+2019-11-06 13:03:01,760 [INFO]: Received status code OK 200 == 200
+2019-11-06 13:03:01,761 [INFO]: Writting to examples/data/primary/unsealed_response.json
+2019-11-06 13:03:01,762 [INFO]: Finished examples/vault-init.yaml
 ```
 
 # Example file vault-init.yaml
