@@ -16,30 +16,51 @@ For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this serv
 $ export VAULT_ADDR=http://httpbin.org/put
 $ export VAULT_CLUSTER=primary
 $ yapi examples/vault-init.yaml
-2019-11-06 13:19:49,733 [INFO]: Starting yapi 0.1
-2019-11-06 13:19:49,738 [INFO]: Loading examples/vault-init.yaml
-2019-11-06 13:19:49,738 [INFO]: Start of stage: 01-Init Vault
-2019-11-06 13:19:49,739 [INFO]: Body of request:
+2019-11-07 12:47:26,255 [INFO]: Starting yapi 0.1.2
+2019-11-07 12:47:26,259 [INFO]: Loading examples/vault-init.yaml
+2019-11-07 12:47:26,259 [INFO]: Stage: 01-Init Vault
+2019-11-07 12:47:26,260 [INFO]: ->Body of request:
 {
     "keys": [
         "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
     ],
-    "secret_shares": "1",
-    "secret_threshold": "1"
+    "secret_shares": 1,
+    "secret_threshold": 1
 }
-2019-11-06 13:19:49,936 [INFO]: Received status code OK 200 == 200
-2019-11-06 13:19:49,936 [INFO]: Writing to examples/data/primary/init.json
-2019-11-06 13:19:49,937 [INFO]: End of stage: 01-Init Vault
-2019-11-06 13:19:49,937 [INFO]: Start of stage: 02-Unseal Vault
-2019-11-06 13:19:49,937 [INFO]: Reading examples/data/primary/init.json , sub_vars: True
-2019-11-06 13:19:49,938 [INFO]: Body of request:
+2019-11-07 12:47:26,467 [INFO]: <-Received status code OK 200 == 200
+2019-11-07 12:47:26,468 [INFO]: <-Body of response:
+{
+  ...
+    "json": {
+        "keys": [
+            "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+        ],
+        "secret_shares": 1,
+        "secret_threshold": 1
+    },
+  ...
+}
+2019-11-07 12:47:26,469 [INFO]: Writing to examples/data/primary/init.json
+2019-11-07 12:47:26,469 [INFO]: End of stage: 01-Init Vault
+
+
+2019-11-07 12:47:26,469 [INFO]: Stage: 02-Unseal Vault
+2019-11-07 12:47:26,470 [INFO]: Reading examples/data/primary/init.json , sub_vars: True
+2019-11-07 12:47:26,471 [INFO]: ->Body of request:
 {
     "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
 }
-2019-11-06 13:19:50,132 [INFO]: Received status code OK 200 == 200
-2019-11-06 13:19:50,132 [INFO]: Writing to examples/data/primary/unsealed_response.json
-2019-11-06 13:19:50,133 [INFO]: End of stage: 02-Unseal Vault
-2019-11-06 13:19:50,133 [INFO]: Finished examples/vault-init.yaml
+2019-11-07 12:47:26,665 [INFO]: <-Received status code OK 200 == 200
+2019-11-07 12:47:26,665 [INFO]: <-Body of response:
+{
+  ...
+    "json": {
+        "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    },
+  ...
+}
+2019-11-07 12:47:26,666 [INFO]: Writing to examples/data/primary/unsealed_response.json
+2019-11-07 12:47:26,666 [INFO]: End of stage: 02-Unseal Vault
 ```
 
 # Example file vault-init.yaml
@@ -126,5 +147,5 @@ keys: "{ext.json_keys_0}"
 
 
 ## TODO 
-- [ ] Inject response as a variable to the next stage without having to read it
+- [ ] Add Automated testing
 - [ ] Create `PyPi` package for easy installation

@@ -5,6 +5,7 @@ from logging import getLogger
 from logging.config import dictConfig
 import sys, os, getopt
 from pprint import pprint
+from pkg_resources import get_distribution
 
 def get_config():
     args, remaining = ArgParser().parse_known_args()
@@ -16,7 +17,7 @@ def get_config():
         'debug': vargs.pop("debug")
     }
 
-__version__ = "0.1"
+__version__ = get_distribution('yapi-ci').version
 cfg = get_config()
 
 if cfg["debug"] is True:

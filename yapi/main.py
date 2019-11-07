@@ -30,11 +30,11 @@ def main():
     #logger.debug(pprint(data))
 
     for stage in data['stages']:
-        logger.info(f"Start of stage: {stage['name']}")
+        logger.info(f"Stage: {stage['name']}")
         request = RestRequest(stage['request'],variables)
         resp = request.run()
         RestResponse(resp,variables).validate(stage['response'])
-        logger.info(f"End of stage: {stage['name']}")
+        logger.info(f"End of stage: {stage['name']}\n\n")
 
     logger.info(f"Finished {cfg['in_file']}")
     exit(0)

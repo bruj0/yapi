@@ -26,9 +26,9 @@ class response:
             logger.error(f"Received status code {rsp.status_code} != {expected['status_code']}\n {rsp.text}")
             exit(1)
         else:
-            logger.info(f"Received status code OK {rsp.status_code} == {expected['status_code']}")
+            logger.info(f"<-Received status code OK {rsp.status_code} == {expected['status_code']}")
 
-        #logger.debug(f"Response text\n{rsp.text}")
+        logger.info(f"<-Body of response:\n{json.dumps(rsp.json(),indent=4, sort_keys=True)}")
 
         expected = format_keys(expected, self.variables)
 

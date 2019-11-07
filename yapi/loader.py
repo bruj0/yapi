@@ -17,16 +17,15 @@ class yaml_loader():
         Returns:
             dict: content of file
         """
-
         try:
             with open(filename, "r") as fileobj:
                 try:
-                    contents = yaml.load(fileobj, Loader=yaml.BaseLoader)
+                    contents = yaml.load(fileobj, Loader=yaml.SafeLoader)
                 except yaml.composer.ComposerError as e:
                     logger.exception(e)
                     exit(1)
         except FileNotFoundError:
             logger.error(f"File not found: {filename}")
             exit(1)
-
+        #logger.debug(f"contents=\n{contents}")
         return contents

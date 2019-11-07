@@ -54,7 +54,7 @@ class request():
             if 'headers' in ra:
                 req.headers=ra['headers']
 
-            logger.info(f"Body of request:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
+            logger.info(f"->Body of request:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
             prepped = req.prepare()
             response = session.send(prepped)
             data = dump.dump_response(response)

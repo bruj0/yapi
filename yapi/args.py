@@ -1,12 +1,14 @@
 import argparse
 from argparse import ArgumentParser
 from textwrap import dedent
-
+from pkg_resources import get_distribution
 
 
 class ArgParser(ArgumentParser):
     def __init__(self):
-        description = """Parse yaml + make requests against an API"""
+        
+        __version__ = get_distribution('yapi-ci').version
+        description = f"Version {__version__}\nParse yaml + make requests against an API"
 
         super(ArgParser, self).__init__(
             description=dedent(description),
@@ -32,4 +34,12 @@ class ArgParser(ArgumentParser):
             action="store_true",
             default=False,
         )
+        
+        self.add_argument(
+            "--version",
+            help="Version of yapi",
+            action="version",
+            version=f"{__version__}"
+        )        
+
 
