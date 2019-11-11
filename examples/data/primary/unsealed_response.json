@@ -1,16 +1,33 @@
 {
   "args": {}, 
-  "data": "{\"keys\": \"7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2\"}", 
+  "data": "{\"mykeys\": [\"7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2\"], \"myheaders\": {\"Accept-Encoding\": \"identity\", \"Content-Length\": \"123\", \"Content-Type\": \"application/json\", \"Host\": \"httpbin.org\"}, \"json_keys_list\": \"7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2\", \"json_secret_shares\": \"test string 1\", \"json_full\": {\"mykeys\": [\"7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2\"], \"secret_shares\": 1, \"secret_threshold\": 1}}", 
   "files": {}, 
   "form": {}, 
   "headers": {
     "Accept-Encoding": "identity", 
-    "Content-Length": "76", 
+    "Content-Length": "473", 
     "Content-Type": "application/json", 
     "Host": "httpbin.org"
   }, 
   "json": {
-    "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    "json_full": {
+      "mykeys": [
+        "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+      ], 
+      "secret_shares": 1, 
+      "secret_threshold": 1
+    }, 
+    "json_keys_list": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2", 
+    "json_secret_shares": "test string 1", 
+    "myheaders": {
+      "Accept-Encoding": "identity", 
+      "Content-Length": "123", 
+      "Content-Type": "application/json", 
+      "Host": "httpbin.org"
+    }, 
+    "mykeys": [
+      "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    ]
   }, 
   "origin": "77.163.156.16, 77.163.156.16", 
   "url": "https://httpbin.org/put"

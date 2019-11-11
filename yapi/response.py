@@ -6,12 +6,17 @@ from yapi.extensions import Extensions
 import requests
 from requests_toolbelt.utils import dump
 import json
+from flatten_json import flatten
+from box import Box
+from box import BoxList
 
 logger = logging.getLogger(__name__)
 
 class response:
     rsp = {}
     extensions = None
+    body_variables = {}
+
     def __init__(self,rsp,variables):
         self.variables = variables
         self.rsp=rsp
@@ -28,7 +33,14 @@ class response:
         else:
             logger.info(f"<-Received status code OK {rsp.status_code} == {expected['status_code']}")
 
-        logger.info(f"<-Body of response:\n{json.dumps(rsp.json(),indent=4, sort_keys=True)}")
+        response_text = rsp.text
+        try:
+            response_text = json.dumps(rsp.json(),indent=4, sort_keys=True)
+        except json.decoder.JSONDecodeError:
+            logger.info(f"<-Text received is not valid json")
+            pass
+
+        logger.info(f"<-Body of response:\n{response_text}")
 
         expected = format_keys(expected, self.variables)
 
@@ -42,7 +54,25 @@ class response:
                 pass
             else:
                 func_data=func()
-                logger.debug(f"Calling {func}: {pformat(func_data)}")
+                logger.debug(f"Calling {func}: {pformat(func_data)}")            
+        #Handling body variables                
+            if key == 'body':
+                rsp_json = Box(rsp.json(),ordered_box=True)
+                logger.debug(f"Boxed response: {pformat(rsp_json)}")
+                for body_vars in expected['body']:
+                    body_var_str = f"rsp_json.{expected['body'][body_vars]}"
+                    logger.debug(f"Body Variables adding: {expected['body'][body_vars]} accessing: {body_var_str}")
+                    tmp = eval(body_var_str)
+                    if isinstance(tmp,Box):
+                            tmp=tmp.to_dict()
+                    elif isinstance(tmp,BoxList):
+                            tmp=tmp.to_list()
+
+                    self.body_variables[body_vars] = tmp
+                logger.debug(f"Body Variables:\n {pformat(self.body_variables)}")
+
+    def get_body_variables(self):
+        return self.body_variables
 
     def get_wrapped_create_function(self,ext,data):
 

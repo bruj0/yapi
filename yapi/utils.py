@@ -2,7 +2,7 @@ import logging
 from box import Box
 from builtins import str as ustr
 import functools
-
+from pprint import pformat
 logger = logging.getLogger(__name__)
 
 class _FormattedString(object):
@@ -62,9 +62,20 @@ def format_keys(val, variables, no_double_format=True):
         logger.debug("Already formatted %s, not double-formatting", formatted)
     elif isinstance(val, (ustr, str)):
         try:
-            formatted = val.format(**box_vars)
-        except KeyError as e:
-            if val.startswith("{ext."):
+            if val.startswith('ext.') or val.startswith('resp.'):
+                logger.debug(f"Converting to json: {val}")
+                logger.debug(f"Using boxed_vars\n{pformat(box_vars)}")
+                formatted = eval(val,box_vars)
+            else:
+                formatted = val.format(**box_vars)
+        except (KeyError, NameError) as e:
+            #Variables from external functions not gathered yet
+            if 'ext' not in variables:
+                pass
+            #Variables from a previous response dont exit yet
+            elif 'resp' not in variables:
+                pass
+            elif '()' in val:
                 pass
             else:
                 logger.error(
@@ -75,8 +86,8 @@ def format_keys(val, variables, no_double_format=True):
         except IndexError as e:
             logger.error(f"Empty format values are invalid {e}")
             exit(1)
-    else:
-        logger.debug(f"Not formatting something of type: {type(formatted)}")
+    #else:
+    #    logger.debug(f"Not formatting something of type: {type(formatted)}")
 
     return formatted
 

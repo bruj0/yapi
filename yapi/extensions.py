@@ -19,9 +19,9 @@ class Extensions:
             
             f.close()
             if 'sub_vars' in kwargs:
-                ret = { 'ext': flatten(data) }
-                logger.debug(f"Flatten data: {pformat(ret)}")
-                return ret
+                #ret = { 'ext': data }
+                logger.debug(f"Returned data: {pformat(data)}")
+                return data
             else:
                 return data
         except FileNotFoundError:

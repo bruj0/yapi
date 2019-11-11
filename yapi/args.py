@@ -41,5 +41,10 @@ class ArgParser(ArgumentParser):
             action="version",
             version=f"{__version__}"
         )        
-
+        self.add_argument(
+            "--dry-run",
+            help="Dont make any outbound requests",
+            action="store_true",
+            default=False
+        )   
 

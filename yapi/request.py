@@ -46,7 +46,7 @@ class request():
 
         self.request_args = self.get_request_args(rspec)
 
-    def run(self):
+    def run(self,dry_run):
         with requests.Session() as session:
             ra = self.request_args
 
@@ -54,8 +54,16 @@ class request():
             if 'headers' in ra:
                 req.headers=ra['headers']
 
-            logger.info(f"->Body of request:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
+            logger.info(f"->URL: {req.url}")
+            logger.info(f"->Method: {req.method}")
+            logger.info(f"->Body:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
+
+#Exit if its a dry run
+            if dry_run is True:
+                return False
+
             prepped = req.prepare()
+
             response = session.send(prepped)
             data = dump.dump_response(response)
             logger.debug(f"Response={data.decode('utf-8')}")
@@ -108,12 +116,13 @@ class request():
                     i: j for i, j in headers.items() if i.lower() != "content-type"
                 }
 
-        fspec = format_keys(rspec, self.variables)
+        # Substitute variables from env_vars and saved from the response in a previous stage
+        fspec = format_keys(rspec,self.variables)
 
         request_args=add_request_args(request_args,fspec,required_in_file, False)
         request_args=add_request_args(request_args,fspec,optional_in_file, True)
 
-        logger.debug(f"Data after substitution: {pformat(fspec)}")
+        logger.debug(f"Data after env_vars substitution:\n{pformat(fspec)}")
 
         if "auth" in fspec:
             request_args["auth"] = tuple(fspec["auth"])
@@ -127,6 +136,8 @@ class request():
             if isinstance(fspec["timeout"], list):
                 request_args["timeout"] = tuple(fspec["timeout"])
 
+        #Traverse optional parts of the request
+        #Will execute any $ext function
         for key in optional_in_file:
             try:
                 func = self.get_wrapped_create_function(request_args[key].pop("$ext"))
@@ -135,13 +146,14 @@ class request():
                 #logger.info(f"Testing func in {key}")
                 pass
             else:
-                func_data=func()
                 logger.debug(f"Calling {func} from {key}")
-                if 'ext' in func_data:
-                    request_args[key] = format_keys(request_args[key], func_data,False)
-                    #logger.debug(f"Reformatting request_args[{key}]={pformat(request_args[key])}")
-                else:
-                    request_args[key].update(func_data)
+                self.variables['ext']=func()
+        
+            #Substitute in the part with ext variables
+            if key in request_args:
+                logger.debug(f"Reformatting request_args[{key}]\n{pformat(request_args[key])}")
+                request_args[key] = format_keys(request_args[key], self.variables,False)
+                logger.debug(f"Result request_args[{key}]\n{pformat(request_args[key])}")
 
         # If there's any nested json in parameters, urlencode it
         # if you pass nested json to 'params' then requests silently fails and just
@@ -169,7 +181,7 @@ class request():
                 logger.warn(
                     "You are trying to send a body with a HTTP verb that has no semantic use for it"
                 )
-        logger.debug(f"Final request_args={pformat(request_args)}")
+        logger.debug(f"Final request_args\n{pformat(request_args)}")
         return request_args
 
 

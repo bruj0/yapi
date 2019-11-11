@@ -7,7 +7,7 @@ stages:
       json:
         secret_shares: 1
         secret_threshold: 1
-        keys:
+        mykeys:
            - 7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2
     response:
       status_code: 200
@@ -16,12 +16,21 @@ stages:
           function: extensions.save_response
           extra_kwargs:
             path: "examples/data/{env_vars.VAULT_CLUSTER}/init.json"
+      body:
+        headers: headers
+        json_keys_list: json.mykeys
+        json_secret_shares: json.secret_shares
+        json_full: json
   - name: 02-Unseal Vault
     request:
       url: "{env_vars.VAULT_ADDR}"
       method: PUT
       json:
-        keys: "{ext.json_keys_0}"
+        mykeys: "ext.json.mykeys.to_list()"
+        myheaders: "resp.headers.to_dict()"
+        json_keys_list: "resp.json_keys_list.to_list()[0]"
+        json_secret_shares: "test string {resp.json_secret_shares}"
+        json_full: "resp.json_full.to_dict()"
         $ext:
           function: extensions.read_json
           extra_kwargs:
