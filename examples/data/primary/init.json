@@ -1,16 +1,16 @@
 {
   "args": {}, 
-  "data": "{\"secret_shares\": 1, \"secret_threshold\": 1, \"keys\": [\"7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2\"]}", 
+  "data": "{\"secret_shares\": 1, \"secret_threshold\": 1, \"mykeys\": [\"7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2\"]}", 
   "files": {}, 
   "form": {}, 
   "headers": {
     "Accept-Encoding": "identity", 
-    "Content-Length": "121", 
+    "Content-Length": "123", 
     "Content-Type": "application/json", 
     "Host": "httpbin.org"
   }, 
   "json": {
-    "keys": [
+    "mykeys": [
       "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
     ], 
     "secret_shares": 1, 

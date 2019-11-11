@@ -4,7 +4,7 @@ import logging
 from logging import getLogger
 from logging.config import dictConfig
 import sys, os, getopt
-from pprint import pprint
+from pprint import pformat, pprint
 from pkg_resources import get_distribution
 
 def get_config():
@@ -14,7 +14,8 @@ def get_config():
         'log_file': vargs.pop("log_to_file"),
         'in_file' : vargs.pop("in_file"),
         'global_cfg' : vargs.pop("global_cfg", {}),
-        'debug': vargs.pop("debug")
+        'debug': vargs.pop("debug"),
+        'dry_run': vargs.pop("dry_run")
     }
 
 __version__ = get_distribution('yapi-ci').version

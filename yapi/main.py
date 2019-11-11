@@ -8,7 +8,7 @@ import logging
 from logging import getLogger
 
 import sys, os, getopt
-from pprint import pprint
+from pprint import pformat
 from . import cfg
 from . import __version__
 
@@ -16,6 +16,8 @@ from . import __version__
 logger = getLogger(__name__)
 
 logger.info(f"Starting yapi {__version__}")
+
+
 
 def main():
     yl = YamlLoader()
@@ -32,12 +34,22 @@ def main():
     for stage in data['stages']:
         logger.info(f"Stage: {stage['name']}")
         request = RestRequest(stage['request'],variables)
-        resp = request.run()
-        RestResponse(resp,variables).validate(stage['response'])
+
+        resp = request.run(cfg['dry_run'])
+
+        if cfg['dry_run'] is True:
+            exit(0)
+
+        response = RestResponse(resp,variables)
+        response.validate(stage['response'])
+        body_variables = response.get_body_variables()
+        variables['resp']=body_variables
+
+        logger.info(f"Saved response variables: \n{pformat(body_variables)}")
         logger.info(f"End of stage: {stage['name']}\n\n")
 
+
     logger.info(f"Finished {cfg['in_file']}")
-    exit(0)
 
 if __name__== "__main__":
   main()
