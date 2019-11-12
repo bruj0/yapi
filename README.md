@@ -148,4 +148,5 @@ keys: "{ext.json_keys_0}"
 
 ## TODO 
 - [ ] Add Automated testing
-- [ ] Create `PyPi` package for easy installation
+- [ ] Add version tagging
+- [ ] Add package automatic building from tags
