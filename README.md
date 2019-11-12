@@ -12,55 +12,150 @@ pip install yapi-ci
 # How to use it
 For this example we will use `http://httpbin.org/put` as `VAULT_ADDR`, this service will echo everything we send plus extra information about our request.
 
-```c
+```js
 $ export VAULT_ADDR=http://httpbin.org/put
 $ export VAULT_CLUSTER=primary
 $ yapi examples/vault-init.yaml
-2019-11-07 12:47:26,255 [INFO]: Starting yapi 0.1.2
-2019-11-07 12:47:26,259 [INFO]: Loading examples/vault-init.yaml
-2019-11-07 12:47:26,259 [INFO]: Stage: 01-Init Vault
-2019-11-07 12:47:26,260 [INFO]: ->Body of request:
+2019-11-12 12:16:38,635 [None][INFO]
+Starting yapi 0.1.4
+2019-11-12 12:16:38,641 [None][INFO]
+Loading examples/vault-init.yaml
+2019-11-12 12:16:38,641 [01-Init Vault][INFO]
+Stage: 01-Init Vault
+2019-11-12 12:16:38,642 [01-Init Vault][INFO]
+->URL: http://httpbin.org/put
+2019-11-12 12:16:38,642 [01-Init Vault][INFO]
+->Method: PUT
+2019-11-12 12:16:38,642 [01-Init Vault][INFO]
+->Body:
 {
-    "keys": [
+    "mykeys": [
         "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
     ],
     "secret_shares": 1,
     "secret_threshold": 1
 }
-2019-11-07 12:47:26,467 [INFO]: <-Received status code OK 200 == 200
-2019-11-07 12:47:26,468 [INFO]: <-Body of response:
+2019-11-12 12:16:38,837 [01-Init Vault][INFO]
+<-Received status code OK 200 == 200
+2019-11-12 12:16:38,837 [01-Init Vault][INFO]
+<-Body of response:
 {
-  ...
+...
+    "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "123",
+        "Content-Type": "application/json",
+        "Host": "httpbin.org"
+    },
     "json": {
-        "keys": [
+        "mykeys": [
             "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
         ],
         "secret_shares": 1,
         "secret_threshold": 1
     },
-  ...
+...
 }
-2019-11-07 12:47:26,469 [INFO]: Writing to examples/data/primary/init.json
-2019-11-07 12:47:26,469 [INFO]: End of stage: 01-Init Vault
+2019-11-12 12:16:38,838 [01-Init Vault][INFO]
+Writing to examples/data/primary/init.json
+2019-11-12 12:16:38,840 [01-Init Vault][INFO]
+Saved response variables:
+{'headers': {'Accept-Encoding': 'identity',
+             'Content-Length': '123',
+             'Content-Type': 'application/json',
+             'Host': 'httpbin.org'},
+ 'json_full': {'mykeys': ['7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2'],
+               'secret_shares': 1,
+               'secret_threshold': 1},
+ 'json_keys_list': ['7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2'],
+ 'json_secret_shares': 1}
+2019-11-12 12:16:38,840 [01-Init Vault][INFO]
+End of stage: 01-Init Vault
 
 
-2019-11-07 12:47:26,469 [INFO]: Stage: 02-Unseal Vault
-2019-11-07 12:47:26,470 [INFO]: Reading examples/data/primary/init.json , sub_vars: True
-2019-11-07 12:47:26,471 [INFO]: ->Body of request:
+2019-11-12 12:16:38,840 [02-Unseal Vault][INFO]
+Stage: 02-Unseal Vault
+2019-11-12 12:16:38,845 [02-Unseal Vault][INFO]
+Reading examples/data/primary/init.json , sub_vars: True
+2019-11-12 12:16:38,848 [02-Unseal Vault][INFO]
+->URL: http://httpbin.org/put
+2019-11-12 12:16:38,848 [02-Unseal Vault][INFO]
+->Method: PUT
+2019-11-12 12:16:38,848 [02-Unseal Vault][INFO]
+->Body:
 {
-    "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
-}
-2019-11-07 12:47:26,665 [INFO]: <-Received status code OK 200 == 200
-2019-11-07 12:47:26,665 [INFO]: <-Body of response:
-{
-  ...
-    "json": {
-        "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    "json_full": {
+        "mykeys": [
+            "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+        ],
+        "secret_shares": 1,
+        "secret_threshold": 1
     },
-  ...
+    "json_keys_list": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2",
+    "json_secret_shares": "test string 1",
+    "myheaders": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "123",
+        "Content-Type": "application/json",
+        "Host": "httpbin.org"
+    },
+    "mykeys": [
+        "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    ]
 }
-2019-11-07 12:47:26,666 [INFO]: Writing to examples/data/primary/unsealed_response.json
-2019-11-07 12:47:26,666 [INFO]: End of stage: 02-Unseal Vault
+2019-11-12 12:16:39,041 [02-Unseal Vault][INFO]
+<-Received status code OK 200 == 200
+2019-11-12 12:16:39,041 [02-Unseal Vault][INFO]
+<-Body of response:
+{
+...
+    "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "473",
+        "Content-Type": "application/json",
+        "Host": "httpbin.org"
+    },
+    "json": {
+        "json_full": {
+            "mykeys": [
+                "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+            ],
+            "secret_shares": 1,
+            "secret_threshold": 1
+        },
+        "json_keys_list": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2",
+        "json_secret_shares": "test string 1",
+        "myheaders": {
+            "Accept-Encoding": "identity",
+            "Content-Length": "123",
+            "Content-Type": "application/json",
+            "Host": "httpbin.org"
+        },
+        "mykeys": [
+            "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+        ]
+    },
+...
+}
+2019-11-12 12:16:39,042 [02-Unseal Vault][INFO]
+Writing to examples/data/primary/unsealed_response.json
+2019-11-12 12:16:39,043 [02-Unseal Vault][INFO]
+Saved response variables:
+{'headers': {'Accept-Encoding': 'identity',
+             'Content-Length': '123',
+             'Content-Type': 'application/json',
+             'Host': 'httpbin.org'},
+ 'json_full': {'mykeys': ['7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2'],
+               'secret_shares': 1,
+               'secret_threshold': 1},
+ 'json_keys_list': ['7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2'],
+ 'json_secret_shares': 1}
+2019-11-12 12:16:39,043 [02-Unseal Vault][INFO]
+End of stage: 02-Unseal Vault
+
+
+2019-11-12 12:16:39,043 [None][INFO]
+Finished examples/vault-init.yaml
 ```
 
 # Example file vault-init.yaml
@@ -74,7 +169,7 @@ stages:
       json:
         secret_shares: 1
         secret_threshold: 1
-        keys:
+        mykeys:
            - 7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2
     response:
       status_code: 200
@@ -83,12 +178,21 @@ stages:
           function: extensions.save_response
           extra_kwargs:
             path: "examples/data/{env_vars.VAULT_CLUSTER}/init.json"
+      body:
+        headers: headers
+        json_keys_list: json.mykeys
+        json_secret_shares: json.secret_shares
+        json_full: json
   - name: 02-Unseal Vault
     request:
       url: "{env_vars.VAULT_ADDR}"
       method: PUT
       json:
-        keys: "{ext.json_keys_0}"
+        mykeys: "ext.json.mykeys.to_list()"
+        myheaders: "resp.headers.to_dict()"
+        json_keys_list: "resp.json_keys_list.to_list()[0]"
+        json_secret_shares: "test string {resp.json_secret_shares}"
+        json_full: "resp.json_full.to_dict()"
         $ext:
           function: extensions.read_json
           extra_kwargs:
@@ -109,37 +213,74 @@ stages:
 - The json sent to the API will be:
 ```json
 {
-    "keys": [
+    "mykeys": [
         "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
     ],
-    "secret_shares": "1",
-    "secret_threshold": "1"
+    "secret_shares": 1,
+    "secret_threshold": 1
 }
 ```
 - It expects a HTTP response of `200` or it will error out.
 - It will save the output of the response as a json file under `data/{env_vars.VAULT_CLUSTER}/init.json`
-
+- It will try to convert the response to json and save them in variables for the next stage:
+```yaml
+    response:
+    ...
+      body:
+        headers: headers
+        json_keys_list: json.mykeys
+        json_secret_shares: json.secret_shares
+        json_full: json
+```
 ### The second stage called `02-Unseal Vault` 
 - Replace replace variables that start with `{env_vars.}` with environmental variables.
+- Insert the variables saved in previous stages from `resp.` converting them to a python dictionary or list depending if we want a json object or array.
+- Variables that have `{}` are used to `format` the string instead of replacing it with its value.
+- 
+```yaml
+      json:
+        mykeys: "ext.json.mykeys.to_list()"
+        myheaders: "resp.headers.to_dict()"
+        json_keys_list: "resp.json_keys_list.to_list()[0]"
+        json_secret_shares: "test string {resp.json_secret_shares}"
+        json_full: "resp.json_full.to_dict()"
+```
 - Read `data/{env_vars.VAULT_CLUSTER}/init.json` and replace variables that start with `ext.` in the body with data from the json when `sub_vars` is set to `True`.
 ```json
   "json": {
-    "keys": [
+    "mykeys": [
       "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
-    ], 
+    ],
 ```
 
 Becomes:
 
 ```yaml
-keys: "{ext.json_keys_0}"
+    mykeys: "ext.json.mykeys.to_list()"
 ```
 
 - Do a `PUT` call to `url`
 - With the json:
 ```json
 {
-    "keys": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    "json_full": {
+        "mykeys": [
+            "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+        ],
+        "secret_shares": 1,
+        "secret_threshold": 1
+    },
+    "json_keys_list": "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2",
+    "json_secret_shares": "test string 1",
+    "myheaders": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "123",
+        "Content-Type": "application/json",
+        "Host": "httpbin.org"
+    },
+    "mykeys": [
+        "7f921414b13ad05eb844dc349423765d857e8175b48c5854ada0e24e96924ac2"
+    ]
 }
 ```
 - It will expect a `200` response code or error out.

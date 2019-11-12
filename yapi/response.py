@@ -9,18 +9,18 @@ import json
 from flatten_json import flatten
 from box import Box
 from box import BoxList
-
-logger = logging.getLogger(__name__)
-
+logger = None
 class response:
     rsp = {}
     extensions = None
     body_variables = {}
 
-    def __init__(self,rsp,variables):
+    def __init__(self,rsp,variables,stage_name):
         self.variables = variables
         self.rsp=rsp
-        self.extensions = Extensions()
+        self.extensions = Extensions(stage_name)
+        global logger 
+        logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': stage_name})
 
     def validate(self,expected):
         rsp = self.rsp

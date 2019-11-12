@@ -3,10 +3,14 @@ import json
 from flatten_json import flatten
 from pprint import pformat
 
-logger = logging.getLogger(__name__)
+logger = None
 
 
 class Extensions:
+    def __init__(self,stage_name):
+        global logger 
+        logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': stage_name})
+
     def call_method(self, method_name):
         return getattr(self, method_name)
 

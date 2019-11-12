@@ -3,7 +3,7 @@ from box import Box
 from builtins import str as ustr
 import functools
 from pprint import pformat
-logger = logging.getLogger(__name__)
+logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': 'Utils'})
 
 class _FormattedString(object):
     """Wrapper class for things that have already been formatted

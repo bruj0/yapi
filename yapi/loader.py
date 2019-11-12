@@ -3,8 +3,7 @@ import logging
 import os.path
 import yaml
 
-logger = logging.getLogger(__name__)
-
+logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': 'None'})
 
 class yaml_loader():
     def load(self,filename):

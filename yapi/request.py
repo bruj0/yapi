@@ -6,21 +6,26 @@ from requests_toolbelt.utils import dump
 import json
 from yapi.utils import *
 
-logger = logging.getLogger(__name__)
+
 # for k,v in  logging.Logger.manager.loggerDict.items()  :
 #         print('+ [%s] {%s} ' % (str.ljust( k, 20)  , str(v.__class__)[8:-2]) ) 
 #         if not isinstance(v, logging.PlaceHolder):
 #             for h in v.handlers:
 #                 print('     +++',str(h.__class__)[8:-2] )
-
+logger = None
 class request():
     variables = {}
     extensions = None
     request_args = {}
+    stage_name = None
+    logger = None
 
-    def __init__(self,rspec,variables):
+    def __init__(self,rspec,variables,stage_name):
         self.variables = variables
-        self.extensions = Extensions()
+        self.extensions = Extensions(stage_name)
+        self.stage_name = stage_name
+        global logger 
+        logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': stage_name})
 
         logger.debug(f"Data passed to request: {pformat(rspec)}")
 
