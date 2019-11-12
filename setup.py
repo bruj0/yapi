@@ -4,12 +4,12 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="yapi-ci", # Replace with your own username
+    name="yapi-ci",
     version="0.1.4",
     author="Rodrigo Diaz Leven",
     author_email="ramakandra@gmail.com",
     license = "MIT",
-    license_file = "LICENSE",   
+    #license_file = "LICENSE",   
     description="Using yaml to talk to APIs in an automated, descriptive way.",
     long_description=long_description,
     long_description_content_type="text/markdown",
