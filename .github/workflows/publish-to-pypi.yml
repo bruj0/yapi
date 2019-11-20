@@ -20,7 +20,7 @@ jobs:
       run: python setup.py sdist bdist_wheel
 #TODO add test
     - name: Publish distribution to Test PyPI
-      if: github.event.ref != 'refs/heads/master' && startsWith(github.event.ref, 'refs/tags') != True
+      if: github.event.ref != 'refs/heads/master' && startsWith(github.event.ref, 'refs/tags') != true
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.pypi_test }}
