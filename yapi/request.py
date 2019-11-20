@@ -27,7 +27,7 @@ class request():
         global logger 
         logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': stage_name})
 
-        logger.debug(f"Data passed to request: {pformat(rspec)}")
+        logger.debug(f"Data passed to request:\n{pformat(rspec)}")
 
         expected = {
             "method",
@@ -55,13 +55,16 @@ class request():
         with requests.Session() as session:
             ra = self.request_args
 
-            req = requests.Request(ra['method'], ra['url'],json=ra['json'])
+            json_body=ra['json'] if 'json' in ra else None
+
+            req = requests.Request(ra['method'], ra['url'],json=json_body)
             if 'headers' in ra:
                 req.headers=ra['headers']
 
             logger.info(f"->URL: {req.url}")
             logger.info(f"->Method: {req.method}")
-            logger.info(f"->Body:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
+            if 'json' in ra:
+                logger.info(f"->Body:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
 
 #Exit if its a dry run
             if dry_run is True:

@@ -32,11 +32,11 @@ log_cfg = {
     'disable_existing_loggers': False,
     "formatters": {
         "default": {
-            "format": "%(asctime)s [%(STAGE)s][%(levelname)s]\n%(message)s",
+            "format": "%(asctime)s [%(STAGE)s][%(levelname)s]\n%(message)s\n",
             "style": "%",
         },
         "debug": {
-            "format": "%(asctime)s [%(STAGE)s][%(levelname)s] (%(name)s:%(lineno)d)\n%(message)s",
+            "format": "%(asctime)s [%(STAGE)s][%(levelname)s] (%(name)s:%(lineno)d)\n%(message)s\n",
             "style": "%",
         }        
     },
