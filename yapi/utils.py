@@ -5,6 +5,7 @@ import functools
 from pprint import pformat
 logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': 'Utils'})
 
+
 class _FormattedString(object):
     """Wrapper class for things that have already been formatted
 
@@ -13,6 +14,7 @@ class _FormattedString(object):
 
     def __init(self, s):
         super(_FormattedString, self).__init__(s)
+
 
 def check_expected_keys(expected, actual):
     """Check that a set of expected keys is a superset of the actual keys
@@ -34,6 +36,7 @@ def check_expected_keys(expected, actual):
 
         msg = "Unexpected keys {}".format(unexpected)
         logger.exception(msg)
+
 
 def format_keys(val, variables, no_double_format=True):
     """recursively format a dictionary with the given values
@@ -65,33 +68,38 @@ def format_keys(val, variables, no_double_format=True):
             if val.startswith('ext.') or val.startswith('resp.'):
                 logger.debug(f"Converting to json: {val}")
                 logger.debug(f"Using boxed_vars\n{pformat(box_vars)}")
-                formatted = eval(val,box_vars)
+                formatted = eval(val, box_vars)
             else:
                 formatted = val.format(**box_vars)
         except (KeyError, NameError) as e:
-            #Variables from external functions not gathered yet
-            if 'ext' not in variables:
-                pass
-            #Variables from a previous response dont exit yet
-            elif 'resp' not in variables:
-                pass
-            elif '()' in val:
-                pass
-            else:
-                logger.error(
-                    "Failed to resolve string [%s] with variables", val
-                )
-                logger.error(f"Key(s) not found: {e}")
-                exit(1)
-        except IndexError as e:
-            logger.error(f"Empty format values are invalid {e}")
-            exit(1)
-    #else:
+            pass
+            return formatted
+        #     # Variables from external functions not gathered yet
+        #     if 'ext' not in variables:
+        #         pass
+        #     # else:
+        #     #    del variables['ext']
+        #     # Variables from a previous response dont exit yet
+        #     if 'resp' not in variables:
+        #         pass
+        #     if '()' in val:
+        #         pass
+
+        #     logger.error(
+        #         "Failed to resolve string [%s] with variables", val
+        #     )
+        #     logger.error(f"Key(s) not found: {e}")
+        #     exit(1)
+        # except IndexError as e:
+        #     logger.error(f"Empty format values are invalid {e}")
+        #     exit(1)
+    # else:
     #    logger.debug(f"Not formatting something of type: {type(formatted)}")
 
     return formatted
 
-def add_request_args(request_args,fspec,keys, optional):
+
+def add_request_args(request_args, fspec, keys, optional):
     for key in keys:
         try:
             request_args[key] = fspec[key]
@@ -102,6 +110,7 @@ def add_request_args(request_args,fspec,keys, optional):
             # This should never happen
             raise
     return request_args
+
 
 def quote(string, safe='/', encoding=None, errors=None):
     """quote('abc def') -> 'abc%20def'
@@ -157,6 +166,7 @@ def quote(string, safe='/', encoding=None, errors=None):
             raise TypeError("quote() doesn't support 'errors' for bytes")
     return quote_from_bytes(string, safe)
 
+
 def quote_plus(string, safe='', encoding=None, errors=None):
     """Like quote(), but also replace ' ' with '+', as required for quoting
     HTML form values. Plus signs in the original string are escaped unless
@@ -165,7 +175,7 @@ def quote_plus(string, safe='', encoding=None, errors=None):
     # Check if ' ' in string, where string may either be a str or bytes.  If
     # there are no spaces, the regular quote will produce the right answer.
     if ((isinstance(string, str) and ' ' not in string) or
-        (isinstance(string, bytes) and b' ' not in string)):
+            (isinstance(string, bytes) and b' ' not in string)):
         return quote(string, safe, encoding, errors)
     if isinstance(safe, str):
         space = ' '
@@ -173,6 +183,7 @@ def quote_plus(string, safe='', encoding=None, errors=None):
         space = b' '
     string = quote(string, safe + space, encoding, errors)
     return string.replace(' ', '+')
+
 
 def quote_from_bytes(bs, safe='/'):
     """Like quote(), but accepts a bytes object rather than a str, and does

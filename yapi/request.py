@@ -3,16 +3,18 @@ from pprint import pformat
 from yapi.extensions import Extensions
 import requests
 from requests_toolbelt.utils import dump
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import json
 from yapi.utils import *
-
-
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # for k,v in  logging.Logger.manager.loggerDict.items()  :
-#         print('+ [%s] {%s} ' % (str.ljust( k, 20)  , str(v.__class__)[8:-2]) ) 
+#         print('+ [%s] {%s} ' % (str.ljust( k, 20)  , str(v.__class__)[8:-2]) )
 #         if not isinstance(v, logging.PlaceHolder):
 #             for h in v.handlers:
 #                 print('     +++',str(h.__class__)[8:-2] )
 logger = None
+
+
 class request():
     variables = {}
     extensions = None
@@ -20,12 +22,13 @@ class request():
     stage_name = None
     logger = None
 
-    def __init__(self,rspec,variables,stage_name):
+    def __init__(self, rspec, variables, stage_name):
         self.variables = variables
         self.extensions = Extensions(stage_name)
         self.stage_name = stage_name
-        global logger 
-        logger = logging.LoggerAdapter(logging.getLogger(__name__), {'STAGE': stage_name})
+        global logger
+        logger = logging.LoggerAdapter(
+            logging.getLogger(__name__), {'STAGE': stage_name})
 
         logger.debug(f"Data passed to request:\n{pformat(rspec)}")
 
@@ -51,35 +54,37 @@ class request():
 
         self.request_args = self.get_request_args(rspec)
 
-    def run(self,dry_run):
+    def run(self, dry_run):
         with requests.Session() as session:
             ra = self.request_args
 
-            json_body=ra['json'] if 'json' in ra else None
+            json_body = ra['json'] if 'json' in ra else None
 
-            req = requests.Request(ra['method'], ra['url'],json=json_body)
+            req = requests.Request(
+                ra['method'], ra['url'], json=json_body)
             if 'headers' in ra:
-                req.headers=ra['headers']
+                req.headers = ra['headers']
 
             logger.info(f"->URL: {req.url}")
             logger.info(f"->Method: {req.method}")
             if 'json' in ra:
-                logger.info(f"->Body:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
+                logger.info(
+                    f"->Body:\n{json.dumps(req.json,indent=4, sort_keys=True)}")
 
-#Exit if its a dry run
+# Exit if its a dry run
             if dry_run is True:
                 return False
 
             prepped = req.prepare()
 
-            response = session.send(prepped)
+            response = session.send(prepped, verify=False)
             data = dump.dump_response(response)
             logger.debug(f"Response={data.decode('utf-8')}")
             return response
 
-    #TODO 
-    #add test_block_config
-    def get_request_args(self,rspec):
+    # TODO
+    # add test_block_config
+    def get_request_args(self, rspec):
 
         request_args = {}
 
@@ -94,26 +99,27 @@ class request():
             "files",
             "timeout",
             "cert",
-             "auth"
+            "auth"
         ]
         optional_with_default = {"verify": True, "stream": False}
-        #METHOD
+        # METHOD
         if "method" not in rspec:
-                logger.debug("Using default GET method")
-                rspec["method"] = "GET"
+            logger.debug("Using default GET method")
+            rspec["method"] = "GET"
 
-        #CONTENT
+        # CONTENT
         content_keys = ["data", "json", "files"]
 
         in_request = [c for c in content_keys if c in rspec]
         if len(in_request) > 1:
-            #If more than one content defined raise an exception
+            # If more than one content defined raise an exception
             if set(in_request) != {"data", "files"}:
                 raise f"Can only specify one type of request data in HTTP request (tried to send {','.join(in_request)})"
 
-        #HEADERS
+        # HEADERS
         headers = rspec.get("headers", {})
-        has_content_header = "content-type" in [h.lower() for h in headers.keys()]
+        has_content_header = "content-type" in [h.lower()
+                                                for h in headers.keys()]
 
         if "files" in rspec:
             if has_content_header:
@@ -125,10 +131,12 @@ class request():
                 }
 
         # Substitute variables from env_vars and saved from the response in a previous stage
-        fspec = format_keys(rspec,self.variables)
+        fspec = format_keys(rspec, self.variables)
 
-        request_args=add_request_args(request_args,fspec,required_in_file, False)
-        request_args=add_request_args(request_args,fspec,optional_in_file, True)
+        request_args = add_request_args(
+            request_args, fspec, required_in_file, False)
+        request_args = add_request_args(
+            request_args, fspec, optional_in_file, True)
 
         logger.debug(f"Data after env_vars substitution:\n{pformat(fspec)}")
 
@@ -144,24 +152,28 @@ class request():
             if isinstance(fspec["timeout"], list):
                 request_args["timeout"] = tuple(fspec["timeout"])
 
-        #Traverse optional parts of the request
-        #Will execute any $ext function
+        # Traverse optional parts of the request
+        # Will execute any $ext function
         for key in optional_in_file:
             try:
-                func = self.get_wrapped_create_function(request_args[key].pop("$ext"))
+                func = self.get_wrapped_create_function(
+                    request_args[key].pop("$ext"))
                 #logger.debug(f"Calling $ext function at {func}")
             except (KeyError, TypeError, AttributeError):
                 #logger.info(f"Testing func in {key}")
                 pass
             else:
                 logger.debug(f"Calling {func} from {key}")
-                self.variables['ext']=func()
-        
-            #Substitute in the part with ext variables
+                self.variables['ext'] = func()
+
+            # Substitute in the part with ext variables
             if key in request_args:
-                logger.debug(f"Reformatting request_args[{key}]\n{pformat(request_args[key])}")
-                request_args[key] = format_keys(request_args[key], self.variables,False)
-                logger.debug(f"Result request_args[{key}]\n{pformat(request_args[key])}")
+                logger.debug(
+                    f"Reformatting request_args[{key}]\n{pformat(request_args[key])}")
+                request_args[key] = format_keys(
+                    request_args[key], self.variables, False)
+                logger.debug(
+                    f"Result request_args[{key}]\n{pformat(request_args[key])}")
 
         # If there's any nested json in parameters, urlencode it
         # if you pass nested json to 'params' then requests silently fails and just
@@ -175,7 +187,7 @@ class request():
                 request_args["params"][key] = quote_plus(json.dumps(value))
 
         for key, val in optional_with_default.items():
-            request_args[key] = fspec.get(key, val)        
+            request_args[key] = fspec.get(key, val)
 
         # TODO
         # requests takes all of these - we need to parse the input to get them
@@ -192,10 +204,9 @@ class request():
         logger.debug(f"Final request_args\n{pformat(request_args)}")
         return request_args
 
+    def get_wrapped_create_function(self, ext):
 
-    def get_wrapped_create_function(self,ext):
-
-        #logger.debug(f"ext={ext}")
+        # logger.debug(f"ext={ext}")
         args = ext.get("extra_args") or ()
         kwargs = ext.get("extra_kwargs") or {}
 
@@ -212,7 +223,9 @@ class request():
             logger.exception(msg)
 
         #func = import_ext_function(ext["function"])
-        logger.debug(f"Adding function {func} with args:{args} and kwargs:{kwargs}")
+        logger.debug(
+            f"Adding function {func} with args:{args} and kwargs:{kwargs}")
+
         @functools.wraps(func)
         def inner():
             return func(*args, **kwargs)
