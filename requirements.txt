@@ -3,7 +3,7 @@ chardet==3.0.4
 flatten-json==0.1.7
 idna==2.8
 python-box==3.4.5
-PyYAML==5.1.2
+PyYAML==5.4
 requests==2.22.0
 requests-toolbelt==0.9.1
 six==1.13.0
