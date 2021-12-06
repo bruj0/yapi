@@ -1,6 +1,6 @@
 # Description of yapi
 
-It allows to use declarative language (yaml) to talk to APIs and to save the response for future ones.
+It allows to use declarative language (yaml) to talk to APIs and to save the response for future calls ones.
 
 The main use case is to talk to [HashiCorp Vault API](https://www.vaultproject.io/api/overview.html).
 
